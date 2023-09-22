@@ -10,6 +10,7 @@ Familiar with the use and development of `java`, `python`, `vue`, `html` and oth
 
 Welcome everyone to visit my personal [BLOG](https://blog.cnkj.site).
 
+<!--
 <picture>
   <source
     srcset="https://github-readme-stats.vercel.app/api?username=carolcoral&show_icons=true&theme=dark&rank_icon=percentile"
@@ -21,4 +22,12 @@ Welcome everyone to visit my personal [BLOG](https://blog.cnkj.site).
   />
   <img src="https://github-readme-stats.vercel.app/api?username=carolcoral&show_icons=true&rank_icon=percentile" />
 </picture>
+-->
 
+
+<a href="https://github.com/anuraghazra/github-readme-stats">
+  <img height=200 align="center" src="https://github-readme-stats.vercel.app/api?username=carolcoral&show_icons=true&rank_icon=percentile" />
+</a>
+<a href="https://github.com/anuraghazra/convoychat">
+  <img height=200 align="center" src="https://github-readme-stats.vercel.app/api/top-langs?username=carolcoral&layout=compact&langs_count=8&card_width=320" />
+</a>
