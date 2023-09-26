@@ -8,7 +8,9 @@ Currently taking the National Software Level Examination.
 
 Familiar with the use and development of `java`, `python`, `vue`, `html` and other languages.
 
-Welcome everyone to visit my personal [BLOG](https://blog.cnkj.site).
+Welcome to visit my [BLOG](https://blog.cnkj.site).
+
+![email](https://img.shields.io/badge/Email-lxw@cnkj.site-blue?logo=gmail)
 
 <!--
 <picture>
