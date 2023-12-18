@@ -15,7 +15,7 @@ Welcome to visit my [BLOG](https://blog.cnkj.site).
 </a>
 
 <a href="https://blog.cnkj.site" style="a:link {color: none; text-decoration:none;}">
-  <img height=auto align="center" style="width:145px;height:20px;" src="https://redirect.cnkj.site:8099/b/2023/657fb7c580f76.webp?type=blog" />
+  <img height=auto align="center" style="width:145px;height:20px;border-radius: 5px;" src="https://redirect.cnkj.site:8099/b/2023/657fb7c580f76.webp?type=blog" />
 </a>
 
 
