@@ -11,11 +11,11 @@ Familiar with the use and development of `java`, `python`, `vue`, `html` and oth
 Welcome to visit my [BLOG](https://blog.cnkj.site).
 
 <a href="mailto:lxw@cnkj.site" style="a:link {color: none; text-decoration:none;}">
-  <img height=auto align="center" src="https://img.shields.io/badge/Email-lxw%40cnkj.site-blue?logo=gmail&label=Email&labelColor=blue&color=green" />
+  <img height=auto align="center" style="width:145px;height:20px;border-radius: 10px;" src="https://img.shields.io/badge/Email-lxw%40cnkj.site-blue?logo=gmail&label=Email&labelColor=blue&color=green" />
 </a>
 
 <a href="https://blog.cnkj.site" style="a:link {color: none; text-decoration:none;}">
-  <img height=auto align="center" style="width:145px;height:20px;border-radius: 5px;" src="https://redirect.cnkj.site:8099/b/2023/657fb7c580f76.webp?type=blog" />
+  <img height=auto align="center" style="width:145px;height:20px;border-radius: 10px;" src="https://redirect.cnkj.site:8099/b/2023/657fb7c580f76.webp?type=blog" />
 </a>
 
 
