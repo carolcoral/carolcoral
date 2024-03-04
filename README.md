@@ -42,3 +42,8 @@ Welcome to visit my [BLOG](https://blog.cnkj.site).
 <a href="https://github.com/carolcoral">
   <img height=200 align="center" src="https://github-readme-stats.vercel.app/api/top-langs?username=carolcoral&layout=compact&langs_count=8&card_width=320" />
 </a>
+
+##### 广告
+<a href="https://ai.ninesure.com/auth/register?inviteCode=3NXGZELMG" target="_blank">
+<img style="float: left;height: 10em; width:100%;" src="https://redirect.cnkj.site:8099/b/2024/65e562aa4a61e.webp?type=blog" alt="九术.webp" title="九术.webp">
+</a>
