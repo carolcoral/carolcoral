@@ -43,6 +43,3 @@ Welcome to visit my [BLOG](https://blog.cnkj.site).
   <img height=200 align="center" src="https://github-readme-stats.vercel.app/api/top-langs?username=carolcoral&layout=compact&langs_count=8&card_width=320" />
 </a>
 
-##### 广告
-
-[![九术AI](https://redirect.cnkj.site:8099/shudaosan/2024/65e674bfefd21.webp?type=blog)](https://yourls.ninesure.com/carol)
