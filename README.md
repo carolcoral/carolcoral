@@ -8,7 +8,7 @@ Currently taking the National Software Level Examination.
 
 Familiar with the use and development of `java`, `python`, `vue`, `html` and other languages.
 
-Welcome to visit my [BLOG](https://blog.cnkj.site).
+Welcome to visit my [BLOG](https://blog.xindu.site).
 
 <a href="mailto:lxw@cnkj.site" style="a:link {color: none; text-decoration:none;}">
   <img height=auto align="center" style="width:145px;height:20px;border-radius: 10px;" src="https://img.shields.io/badge/Email-lxw%40cnkj.site-blue?logo=gmail&label=Email&labelColor=blue&color=green" />
