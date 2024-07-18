@@ -14,7 +14,7 @@ Welcome to visit my [BLOG](https://blog.xindu.site).
   <img height=auto align="center" style="width:145px;height:20px;border-radius: 10px;" src="https://img.shields.io/badge/Email-lxw%40cnkj.site-blue?logo=gmail&label=Email&labelColor=blue&color=green" />
 </a>
 
-<a href="https://blog.cnkj.site" style="a:link {color: none; text-decoration:none;}">
+<a href="https://blog.xindu.site" style="a:link {color: none; text-decoration:none;}">
   <img height=auto align="center" style="width:145px;height:20px;border-radius: 10px;" src="https://redirect.cnkj.site:8099/b/2023/657fb7c580f76.webp?type=blog" />
 </a>
 
