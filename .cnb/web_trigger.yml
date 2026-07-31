@@ -7,7 +7,6 @@ branch:
   - buttons:
       - name: 同步到 GitHub
         description: 将 CNB 仓库代码强制同步到 GitHub (carolcoral/carolcoral)
-        event: web_trigger_sync
+        event: web_trigger_push_github
         permissions:
           roles: [owner]
-
