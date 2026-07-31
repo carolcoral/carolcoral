@@ -1,48 +1,25 @@
-# ╔══════════════════════════════════════════════╗
-# ║  CNB → GitHub 自动镜像同步                    ║
-# ║  push: 自动推送 | web_trigger: 手动强制同步   ║
-# ╚══════════════════════════════════════════════╝
-
-main:
-  push:
-    - name: sync-github
-      docker:
-        image: alpine/git:latest
-      env:
-        GITHUB_REPO: github.com/carolcoral/carolcoral
-      stages:
-        - name: push-mirror
-          script: |
-            echo ":: CNB → GitHub Mirror Sync ::"
-            REPO_URL="https://${GITHUB_TOKEN}@${GITHUB_REPO}.git"
-            # Strip CNB/CodeBuddy internal files before syncing to GitHub
-            git rm -rf --cached .cnb .cnb.yml .codebuddy 2>/dev/null || true
-            git commit -m "sync: exclude cnb internal configs" --allow-empty
-            git remote add mirror ${REPO_URL} 2>/dev/null || git remote set-url mirror ${REPO_URL}
-            echo "Pushing branches (excluding .cnb/ .cnb.yml .codebuddy/)..."
-            git push mirror --all -f --prune
-            echo "Pushing tags..."
-            git push mirror --tags -f
-            echo ":: Sync completed ::"
-
+# 手动触发：将代码推送到 GitHub
 $:
-  web_trigger_sync:
-    - name: manual-sync-github
+  web_trigger_push_github:
+    - name: push-to-github
       docker:
-        image: alpine/git:latest
-      env:
-        GITHUB_REPO: github.com/carolcoral/carolcoral
+        image: docker.io/alpine/git:latest
+      imports:
+        # 密钥仓库需包含 GITHUB_TOKEN（Personal Access Token，需 repo 权限）
+        # 请根据实际密钥仓库路径修改此 URL
+        - https://cnb.cool/xindu.site/secret/-/blob/main/token.yaml
       stages:
-        - name: force-push
+        - name: push to GitHub
           script: |
-            echo ":: CNB → GitHub Manual Force Sync ::"
-            REPO_URL="https://${GITHUB_TOKEN}@${GITHUB_REPO}.git"
-            # Strip CNB/CodeBuddy internal files before syncing to GitHub
-            git rm -rf --cached .cnb .cnb.yml .codebuddy 2>/dev/null || true
-            git commit -m "sync: exclude cnb internal configs" --allow-empty
-            git remote add mirror ${REPO_URL} 2>/dev/null || git remote set-url mirror ${REPO_URL}
-            echo "Force pushing branches (excluding .cnb/ .cnb.yml .codebuddy/)..."
-            git push mirror --all -f --prune
-            echo "Force pushing tags..."
-            git push mirror --tags -f
-            echo ":: Manual sync completed ::"
+            git config --global user.email "cnb-ci@cnb.cool"
+            git config --global user.name "CNB CI"
+
+            # 移除 CNB 专属文件，不推送到 GitHub
+            rm -rf .cnb/ .cnb.yml .codebuddy .github .ide
+            git add -A
+            git commit -m "chore: remove CNB config (auto-generated mirror)" --allow-empty
+
+            # 推送到 GitHub
+            git remote add github https://x-access-token:${GITHUB_TOKEN}@github.com/carolcoral/carolcoral.git
+            git push github HEAD:refs/heads/${CNB_BRANCH} --force
+            git push github --tags --force
