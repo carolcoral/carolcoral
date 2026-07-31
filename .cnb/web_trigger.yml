@@ -9,6 +9,5 @@ branch:
         description: 将 CNB 仓库代码强制同步到 GitHub (carolcoral/carolcoral)
         event: web_trigger_sync
         permissions:
-          roles:
-            - master
-            - developer
+          roles: [owner]
+
