@@ -46,9 +46,15 @@
 
 <div align="center">
 
-| GitHub Stats | Tech Stack |
-|:---:|:---:|
-| <img src="https://github-stats-extended.vercel.app/api?username=carolcoral&show_icons=true&hide_title=true&title_color=22d3ee&icon_color=3b82f6&text_color=e2e8f0&bg_color=0b1020&border_color=1e2a4a&hide_border=true" alt="github stats"/> | <img src="https://skillicons.dev/icons?i=java,spring,ruby,js,vue,python,nodejs,html,css,mysql,redis,docker,linux,nginx,git,github" alt="tech stack"/> |
+<div style="display:inline-block;vertical-align:top;">
+  <h3>📊 GitHub 数据</h3>
+  <img src="https://github-stats-extended.vercel.app/api?username=carolcoral&show_icons=true&hide_title=true&title_color=22d3ee&icon_color=3b82f6&text_color=e2e8f0&bg_color=0b1020&border_color=1e2a4a&hide_border=true" alt="github stats"/>
+</div>
+
+<div style="display:inline-block;vertical-align:top;margin-left:30px;">
+  <h3>🛠 技术栈</h3>
+  <img src="https://skillicons.dev/icons?i=java,spring,ruby,js,vue,python,nodejs,html,css,mysql,redis,docker,linux,nginx,git,github" alt="tech stack"/>
+</div>
 
 </div>
 
