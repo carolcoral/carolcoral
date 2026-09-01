@@ -46,7 +46,7 @@
 
 <div align="center">
 
-<img src="https://github-readme-stats.vercel.app/api?username=carolcoral&show_icons=true&hide_title=true&title_color=22d3ee&icon_color=3b82f6&text_color=e2e8f0&bg_color=0b1020&border_color=1e2a4a&hide_border=true" alt="github stats"/>
+<img src="https://github-stats-extended.vercel.app/api?username=carolcoral&show_icons=true&hide_title=true&title_color=22d3ee&icon_color=3b82f6&text_color=e2e8f0&bg_color=0b1020&border_color=1e2a4a&hide_border=true" alt="github stats"/>
 
 </div>
 
