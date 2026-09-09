@@ -20,7 +20,7 @@
 </p>
 
 <p>
-  <img src="https://komarev.com/ghpvc/?username=carolcoral&color=22d3ee&style=flat-square&label=Profile+Views" alt="profile views"/>
+  <img src="https://proxy.xindu.site/https://komarev.com/ghpvc/?username=carolcoral&color=22d3ee&style=flat-square&label=Profile+Views" alt="profile views"/>
   <img src="https://img.shields.io/badge/Status-Online%20%26%20Building-34d399?style=flat-square" alt="status"/>
 </p>
 
@@ -32,7 +32,7 @@
 </p>
 
 <p>
-  <a href="https://github.com/carolcoral"><img src="https://img.shields.io/badge/GitHub-carolcoral-181717?style=for-the-badge&logo=github&logoColor=white" alt="github"/></a>
+  <a href="https://proxy.xindu.site/https://github.com/carolcoral"><img src="https://img.shields.io/badge/GitHub-carolcoral-181717?style=for-the-badge&logo=github&logoColor=white" alt="github"/></a>
   <a href="https://cnb.cool/xindu.site"><img src="https://img.shields.io/badge/CNB-xindu.site-0052cc?style=for-the-badge&logo=gitlab&logoColor=white" alt="cnb"/></a>
   <a href="https://xindu.site"><img src="https://img.shields.io/badge/Website-xindu.site-22d3ee?style=for-the-badge&logo=homeadvisor&logoColor=white" alt="website"/></a>
   <a href="https://blog.xindu.site"><img src="https://img.shields.io/badge/Blog-blog.xindu.site-3b82f6?style=for-the-badge&logo=hashnode&logoColor=white" alt="blog"/></a>
@@ -46,7 +46,7 @@
 
 <div align="center">
 
-<img src="https://github-stats-extended.vercel.app/api?username=carolcoral&show_icons=true&hide_title=true&title_color=22d3ee&icon_color=3b82f6&text_color=e2e8f0&bg_color=0b1020&border_color=1e2a4a&hide_border=true" alt="github stats"/>
+<img src="https://proxy.xindu.site/https://github-stats-extended.vercel.app/api?username=carolcoral&show_icons=true&hide_title=true&title_color=22d3ee&icon_color=3b82f6&text_color=e2e8f0&bg_color=0b1020&border_color=1e2a4a&hide_border=true" alt="github stats"/>
 
 </div>
 
@@ -55,7 +55,7 @@
 ## 🛠 技术栈 / Tech Stack
 
 <div align="center">
-  <img src="https://skillicons.dev/icons?i=java,spring,ruby,js,vue,python,nodejs,html,css,mysql,redis,docker,linux,nginx,git,github" alt="tech stack"/>
+  <img src="https://proxy.xindu.site/https://skillicons.dev/icons?i=java,spring,ruby,js,vue,python,nodejs,html,css,mysql,redis,docker,linux,nginx,git,github" alt="tech stack"/>
 </div>
 
 ---
@@ -66,7 +66,7 @@
 
 | 平台 | 地址 | 定位 |
 |---|---|---|
-| GitHub | [github.com/carolcoral](https://github.com/carolcoral) | 全球开源主阵地 · 社区互动 |
+| GitHub | [github.com/carolcoral](https://proxy.xindu.site/https://github.com/carolcoral) | 全球开源主阵地 · 社区互动 |
 | CNB | [cnb.cool/xindu.site](https://cnb.cool/xindu.site) | 国内高速镜像 · Redmine 生态专属托管 |
 
 </div>
@@ -88,8 +88,8 @@ Motto    : "Build · Mirror · Share"
 
 <div align="center">
 
-<a href="https://github.com/carolcoral"><img src="https://img.shields.io/github/stars/carolcoral?label=Stars&style=social" alt="stars"/></a>
-<a href="https://github.com/carolcoral?tab=followers"><img src="https://img.shields.io/github/followers/carolcoral?label=Followers&style=social" alt="followers"/></a>
+<a href="https://proxy.xindu.site/https://github.com/carolcoral"><img src="https://img.shields.io/github/stars/carolcoral?label=Stars&style=social" alt="stars"/></a>
+<a href="https://proxy.xindu.site/https://github.com/carolcoral?tab=followers"><img src="https://img.shields.io/github/followers/carolcoral?label=Followers&style=social" alt="followers"/></a>
 <a href="https://xindu.site"><img src="https://img.shields.io/badge/Website-xindu.site-22d3ee?style=social&logo=homeadvisor" alt="website"/></a>
 
 </div>
