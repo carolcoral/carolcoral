@@ -17,7 +17,6 @@
 *“Build · Mirror · Share”*
 
 <img src="https://img.shields.io/badge/Status-Online%20%26%20Building-34d399?style=flat-square" alt="status"/>
-<img src="https://komarev.com/ghpvc/?username=carolcoral&color=22d3ee&style=flat-square&label=Profile+Views" alt="profile views"/>
 
 <img src="https://img.shields.io/badge/★_Stars-1.2k-ffd166?style=for-the-badge&logo=github&logoColor=white" alt="stars"/>
 <img src="https://img.shields.io/badge/⑂_Forks-290-3b82f6?style=for-the-badge&logo=git&logoColor=white" alt="forks"/>
@@ -35,17 +34,17 @@
 
 ## 📊 实时数据 / Live Stats
 
-<div align="center">
+CNB 页面受 CSP 限制，只允许白名单域名加载图片。Vercel 系统计卡片
+（`github-readme-stats`、`github-stats-extended`）不在白名单内，
+直链在 CNB 上会被拦截成裂图，因此**不再内嵌**，避免留下坏图。
 
-<img src="https://github-stats-extended.vercel.app/api?username=carolcoral&show_icons=true&hide_title=true&title_color=22d3ee&icon_color=3b82f6&text_color=e2e8f0&bg_color=0b1020&border_color=1e2a4a&hide_border=true" alt="github stats"/>
+需要看数据请直接访问：
 
-<img src="https://github-readme-stats.vercel.app/api/top-langs/?username=carolcoral&layout=compact&title_color=22d3ee&text_color=e2e8f0&bg_color=0b1020&hide_border=true" alt="top langs"/>
+- GitHub 主页 → <https://github.com/carolcoral>
+- 统计卡片（本地/代理环境）→
+  <https://github-stats-extended.vercel.app/api?username=carolcoral&show_icons=true>
 
-</div>
-
-> 说明：统计卡片由 Vercel 托管，国内直连可能超时；CNB 渲染时若加载失败，
-> 请在浏览器开启代理后刷新。**不要**给这些 URL 套第三方代理前缀，CNB 的 CSP
-> 白名单只允许上表列出的域名，套代理会直接被拦截成裂图。
+> 想把卡片重新嵌回 README，需要先解决域名问题（见文末「维护约定」）。
 
 ---
 
@@ -53,7 +52,20 @@
 
 <div align="center">
 
-<img src="https://skillicons.dev/icons?i=java,spring,ruby,js,vue,python,nodejs,html,css,mysql,redis,docker,linux,nginx,git,github" alt="tech stack"/>
+<img src="https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white" alt="java"/>
+  <img src="https://img.shields.io/badge/Spring-6DB33F?style=for-the-badge&logo=spring&logoColor=white" alt="spring"/>
+  <img src="https://img.shields.io/badge/Ruby-CC342D?style=for-the-badge&logo=ruby&logoColor=white" alt="ruby"/>
+  <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" alt="js"/>
+  <img src="https://img.shields.io/badge/Vue.js-4FC08D?style=for-the-badge&logo=vuedotjs&logoColor=white" alt="vue"/>
+  <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="python"/>
+  <img src="https://img.shields.io/badge/Node.js-5FA04E?style=for-the-badge&logo=nodedotjs&logoColor=white" alt="nodejs"/>
+  <img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white" alt="mysql"/>
+  <img src="https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white" alt="redis"/>
+  <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="docker"/>
+  <img src="https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black" alt="linux"/>
+  <img src="https://img.shields.io/badge/Nginx-009639?style=for-the-badge&logo=nginx&logoColor=white" alt="nginx"/>
+  <img src="https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white" alt="git"/>
+  <img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white" alt="github"/>
 
 </div>
 
@@ -105,9 +117,23 @@ Motto    : "Build · Mirror · Share"
 
 ## 📝 维护约定 / Readme Notes
 
-- 图片域名白名单（CNB CSP `img-src` 实测）：
-  `img.shields.io`、`github.com`、`*.githubusercontent.com`、`*.cnb.cool`、
-  `*.cdn-go.cn`、`*.qlogo.cn`、`storage.deepin.org`、`deepwiki.com`、`commit.cool`。
+- 图片域名白名单（CNB CSP `img-src` 实测，2026-09 抓包）：
+
+  ```text
+  img-src 'self' data: blob:
+    https://*.cnb.cool          https://*.cdn-go.cn
+    https://*.qlogo.cn          https://*.weixin.qq.com
+    https://img.shields.io      https://github.com
+    https://*.githubusercontent.com
+    https://storage.deepin.org  https://deepwiki.com
+    https://commit.cool
+  ```
+
+- **不在白名单的域名一律不要引用**，包括 `proxy.xindu.site`、`skillicons.dev`、
+  `komarev.com`、`*.vercel.app`。浏览器会直接拒绝发起请求（`requestfailed: csp`），
+  表现为裂图，套代理前缀也没用。
+- 目前所有图片只用 `img.shields.io` 和 `github.com`，命中率 100%。
+- 统计卡片若想重新内嵌，需先把 SVG 落到白名单域名下（CNB 制品 / 仓库内文件）。
 - 提交前请用真实环境验证渲染：
   `https://cnb.cool/xindu.site/xindu.site` → README 标签页。
 - 本仓库推送 GitHub 前会由 CI 移除 `.cnb/`、`.cnb.yml` 等 CNB 专属文件，
