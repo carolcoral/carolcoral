@@ -34,17 +34,15 @@
 
 ## 📊 实时数据 / Live Stats
 
-CNB 页面受 CSP 限制，只允许白名单域名加载图片。Vercel 系统计卡片
-（`github-readme-stats`、`github-stats-extended`）不在白名单内，
-直链在 CNB 上会被拦截成裂图，因此**不再内嵌**，避免留下坏图。
+<div align="center">
 
-需要看数据请直接访问：
+<img src="https://cnb.cool/xindu.site/xindu.site/-/git/raw/main/assets/github-stats.svg" alt="GitHub stats" width="860"/>
 
-- GitHub 主页 → <https://github.com/carolcoral>
-- 统计卡片（本地/代理环境）→
-  <https://github-stats-extended.vercel.app/api?username=carolcoral&show_icons=true>
+</div>
 
-> 想把卡片重新嵌回 README，需要先解决域名问题（见文末「维护约定」）。
+> 数据由 CNB 定时流水线（`stats-svg`，每天 03:00）从 GitHub API 抓取，
+> 渲染成仓库内的 `assets/github-stats.svg` 后自动提交。
+> 图片落在 `*.cnb.cool`（CNB CSP 白名单内）并在 GitHub 侧经 camo 转存，双平台均可正常显示。
 
 ---
 
@@ -133,7 +131,9 @@ Motto    : "Build · Mirror · Share"
   `komarev.com`、`*.vercel.app`。浏览器会直接拒绝发起请求（`requestfailed: csp`），
   表现为裂图，套代理前缀也没用。
 - 目前所有图片只用 `img.shields.io` 和 `github.com`，命中率 100%。
-- 统计卡片若想重新内嵌，需先把 SVG 落到白名单域名下（CNB 制品 / 仓库内文件）。
+- 统计卡片已改为**仓库内自包含 SVG**（`assets/github-stats.svg`），由
+  `scripts/gen-stats.mjs` + `.cnb.yml` 的 `stats-svg` 定时任务维护，
+  README 引用 `cnb.cool/.../-/git/raw/main/assets/github-stats.svg`（命中 `*.cnb.cool` 白名单）。
 - 提交前请用真实环境验证渲染：
   `https://cnb.cool/xindu.site/xindu.site` → README 标签页。
 - 本仓库推送 GitHub 前会由 CI 移除 `.cnb/`、`.cnb.yml` 等 CNB 专属文件，

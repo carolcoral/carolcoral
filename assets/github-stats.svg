@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="860" height="300" viewBox="0 0 860 300" role="img" aria-label="GitHub stats for carolcoral">
+  <title>GitHub Stats · carolcoral</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0b1020"/>
+      <stop offset="100%" stop-color="#0f1730"/>
+    </linearGradient>
+  </defs>
+  <rect width="860" height="300" rx="14" fill="url(#bg)" stroke="#1e2a4a"/>
+
+  <circle cx="48" cy="44" r="22" fill="#1e2a4a" stroke="#3b82f6"/>
+  <text x="48" y="52" fill="#22d3ee" font-size="20" font-weight="700" text-anchor="middle" font-family="ui-monospace,monospace">C</text>
+  <text x="82" y="40" fill="#e2e8f0" font-size="18" font-weight="700" font-family="system-ui,-apple-system,'PingFang SC',sans-serif">Carol <tspan fill="#64748b" font-weight="400">@carolcoral</tspan></text>
+  <text x="82" y="60" fill="#64748b" font-size="12" font-family="ui-monospace,monospace">Build · Mirror · Share</text>
+  <text x="834" y="40" fill="#475569" font-size="11" text-anchor="end" font-family="ui-monospace,monospace">updated 2026-09-30</text>
+
+  <g>
+    <rect x="26.0" y="78" width="188.5" height="72" rx="10" fill="#111a30" stroke="#1e2a4a"/>
+    <text x="120.3" y="110" fill="#ffd166" font-size="24" font-weight="700" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">1225</text>
+    <text x="120.3" y="133" fill="#94a3b8" font-size="12" text-anchor="middle" font-family="system-ui,-apple-system,'PingFang SC',sans-serif" letter-spacing="1">Stars</text>
+  </g>
+  <g>
+    <rect x="232.5" y="78" width="188.5" height="72" rx="10" fill="#111a30" stroke="#1e2a4a"/>
+    <text x="326.8" y="110" fill="#3b82f6" font-size="24" font-weight="700" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">290</text>
+    <text x="326.8" y="133" fill="#94a3b8" font-size="12" text-anchor="middle" font-family="system-ui,-apple-system,'PingFang SC',sans-serif" letter-spacing="1">Forks</text>
+  </g>
+  <g>
+    <rect x="439.0" y="78" width="188.5" height="72" rx="10" fill="#111a30" stroke="#1e2a4a"/>
+    <text x="533.3" y="110" fill="#34d399" font-size="24" font-weight="700" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">34</text>
+    <text x="533.3" y="133" fill="#94a3b8" font-size="12" text-anchor="middle" font-family="system-ui,-apple-system,'PingFang SC',sans-serif" letter-spacing="1">Repos</text>
+  </g>
+  <g>
+    <rect x="645.5" y="78" width="188.5" height="72" rx="10" fill="#111a30" stroke="#1e2a4a"/>
+    <text x="739.8" y="110" fill="#ef476f" font-size="24" font-weight="700" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">83</text>
+    <text x="739.8" y="133" fill="#94a3b8" font-size="12" text-anchor="middle" font-family="system-ui,-apple-system,'PingFang SC',sans-serif" letter-spacing="1">Followers</text>
+  </g>
+
+  <text x="26" y="186" fill="#94a3b8" font-size="12" font-family="system-ui,-apple-system,'PingFang SC',sans-serif" letter-spacing="1">TOP LANGUAGES</text>
+  <rect x="26.0" y="196" width="179.6" height="10" fill="#22d3ee"/>
+  <rect x="205.6" y="196" width="149.6" height="10" fill="#3b82f6"/>
+  <rect x="355.2" y="196" width="149.6" height="10" fill="#a855f7"/>
+  <rect x="504.8" y="196" width="149.6" height="10" fill="#f472b6"/>
+  <rect x="654.4" y="196" width="119.7" height="10" fill="#34d399"/>
+  <rect x="774.1" y="196" width="59.9" height="10" fill="#ffd166"/>
+  <circle cx="31.0" cy="232" r="5" fill="#22d3ee"/>
+    <text x="42.0" y="236" fill="#cbd5e1" font-size="12" font-family="system-ui,-apple-system,'PingFang SC',sans-serif">JavaScript 22%</text>
+  <circle cx="159.4" cy="232" r="5" fill="#3b82f6"/>
+    <text x="170.4" y="236" fill="#cbd5e1" font-size="12" font-family="system-ui,-apple-system,'PingFang SC',sans-serif">Java 19%</text>
+  <circle cx="248.2" cy="232" r="5" fill="#a855f7"/>
+    <text x="259.2" y="236" fill="#cbd5e1" font-size="12" font-family="system-ui,-apple-system,'PingFang SC',sans-serif">Python 19%</text>
+  <circle cx="350.2" cy="232" r="5" fill="#f472b6"/>
+    <text x="361.2" y="236" fill="#cbd5e1" font-size="12" font-family="system-ui,-apple-system,'PingFang SC',sans-serif">Ruby 19%</text>
+  <circle cx="439.0" cy="232" r="5" fill="#34d399"/>
+    <text x="450.0" y="236" fill="#cbd5e1" font-size="12" font-family="system-ui,-apple-system,'PingFang SC',sans-serif">Vue 15%</text>
+  <circle cx="521.2" cy="232" r="5" fill="#ffd166"/>
+    <text x="532.2" y="236" fill="#cbd5e1" font-size="12" font-family="system-ui,-apple-system,'PingFang SC',sans-serif">CSS 7%</text>
+</svg>
