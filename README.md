@@ -36,7 +36,7 @@
 
 <div align="center">
 
-<img src="https://cnb.cool/xindu.site/xindu.site/-/git/raw/feat/stats-svg-pipeline/assets/github-stats.svg" alt="GitHub stats" width="860"/>
+<img src="https://cnb.cool/xindu.site/xindu.site/-/git/raw/main/assets/github-stats.svg" alt="GitHub stats" width="860"/>
 
 </div>
 
@@ -133,7 +133,7 @@ Motto    : "Build · Mirror · Share"
 - 目前所有图片只用 `img.shields.io` 和 `github.com`，命中率 100%。
 - 统计卡片已改为**仓库内自包含 SVG**（`assets/github-stats.svg`），由
   `scripts/gen-stats.mjs` + `.cnb.yml` 的 `stats-svg` 定时任务维护，
-  README 引用 `cnb.cool/.../-/git/raw/feat/stats-svg-pipeline/assets/github-stats.svg`（命中 `*.cnb.cool` 白名单）。
+  README 引用 `cnb.cool/.../-/git/raw/main/assets/github-stats.svg`（命中 `*.cnb.cool` 白名单）。
 - 提交前请用真实环境验证渲染：
   `https://cnb.cool/xindu.site/xindu.site` → README 标签页。
 - 本仓库推送 GitHub 前会由 CI 移除 `.cnb/`、`.cnb.yml` 等 CNB 专属文件，
