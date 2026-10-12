@@ -56,6 +56,12 @@ const CNB_HOST = `${process.env.CNB_WEB_PROTOCOL || 'https'}://${process.env.CNB
 const CNB_API = process.env.CNB_API_ENDPOINT || 'https://api.cnb.cool';
 const GH_API = 'https://api.github.com';
 
+// 只镜像对用户可见的 refs。CNB 的 refs/pull/*、refs/fetched/*、refs/notes/* 属隐藏引用，
+// GitHub 一律拒收（deny updating a hidden ref）。早期用 --mirror 会把它们一并推过去，
+// 导致每推一个仓库必报「remotes/origin/HEAD... refs/pull/N/head (deny updating a hidden ref)」，
+// 且退出码非 0 被误判为整仓失败——即使 main/标签其实已经推成功了。
+const VISIBLE_REFSPECS = ['+refs/heads/*:refs/heads/*', '+refs/tags/*:refs/tags/*'];
+
 if (!GITHUB_TOKEN && !DRY_RUN) {
   console.error('缺少 GITHUB_TOKEN，无法创建/推送 GitHub 仓库');
   process.exit(1);
@@ -128,6 +134,33 @@ async function ensureGitHubRepo(name, cnbPath) {
 }
 
 /**
+ * 取镜像克隆里的默认分支名。
+ * 不能直接用 `symbolic-ref --short HEAD`：当远端 HEAD 指向的是 refs/heads/main 之外的东西，
+ * 或有仓库把 ref 路径写成「heads/main」这种异常值时，会得到 `heads/main` 这类带前缀的脏值，
+ * 拼成 refspec 就是 refs/heads/heads/main，git 报 `src refspec does not match any`。
+ * 所以统一剥掉 refs/heads/ 或 heads/ 前缀，并回退到实际存在的分支。
+ */
+async function detectDefaultBranch(dir) {
+  const raw = (await exec('git', ['-C', dir, 'symbolic-ref', '--short', 'HEAD']).catch(() => '')) || '';
+  const cleaned = raw.replace(/^refs\/heads\//, '').replace(/^heads\//, '');
+  if (cleaned) return cleaned;
+
+  // HEAD 是游离状态或指向非分支 ref 时，退而求其次：main/master 里挑第一个存在的
+  for (const candidate of ['main', 'master']) {
+    const ok = await exec('git', ['-C', dir, 'show-ref', '--verify', '--quiet', `refs/heads/${candidate}`]).then(
+      () => true,
+      () => false
+    );
+    if (ok) return candidate;
+  }
+  const heads = (await exec('git', ['-C', dir, 'for-each-ref', '--format=%(refname:short)', 'refs/heads/']))
+    .split('\n')
+    .map((l) => l.trim())
+    .filter(Boolean);
+  return heads[0] || 'main';
+}
+
+/**
  * 镜像单个仓库：拉取 CNB 的 *全部* refs（分支+标签+PR），整体推到 GitHub。
  * 用 --mirror 而非 checkout：镜像要的是完整历史与标签，
  * 且强制推送会覆盖 GitHub 侧 auto_init 产生的 README 提交，符合「以 CNB 为准」的语义。
@@ -144,19 +177,18 @@ async function mirrorRepo({ name, path, archived = false }, workdir, ghDefaultBr
   const ghRemote = `https://x-access-token:${GITHUB_TOKEN}@github.com/${OWNER}/${name}.git`;
 
   await exec('git', ['clone', '--mirror', '--quiet', cnbRemote, dir]);
-  // 源仓库的默认分支：镜像克隆会保留 HEAD 指向
-  const srcDefault = (await exec('git', ['-C', dir, 'symbolic-ref', '--short', 'HEAD']).catch(() => '')) || 'main';
+  const srcDefault = await detectDefaultBranch(dir);
 
   if (DRY_RUN) {
     const note = ghDefaultBranch && ghDefaultBranch !== srcDefault ? `（默认分支 ${ghDefaultBranch} → ${srcDefault}）` : '';
     log(`  [dry-run] 将强制推送到 ${OWNER}/${name}${note}`);
-    return { pushed: true };
+    return { pushed: true, workflowBlocked: false };
   }
 
   await exec('git', ['-C', dir, 'config', 'user.name', GIT_USER]);
   await exec('git', ['-C', dir, 'config', 'user.email', GIT_EMAIL]);
 
-  // 已存在同名仓库且默认分支与源不一致：先对齐默认分支，否则 mirror 会卡在删不掉旧默认分支
+  // 已存在同名仓库且默认分支与源不一致：先对齐默认分支，否则后续强推时旧默认分支删不掉
   if (ghDefaultBranch && ghDefaultBranch !== srcDefault) {
     log(`  默认分支对齐：${ghDefaultBranch} → ${srcDefault}`);
     await exec('git', ['-C', dir, 'push', '--quiet', ghRemote, `refs/heads/${srcDefault}:refs/heads/${srcDefault}`]);
@@ -167,8 +199,25 @@ async function mirrorRepo({ name, path, archived = false }, workdir, ghDefaultBr
     if (!res.ok) throw new Error(`切换默认分支到 ${srcDefault} 失败：${res.status}`);
   }
 
-  const out = await exec('git', ['-C', dir, 'push', '--mirror', '--quiet', ghRemote]);
-  if (out) log(out);
+  // 只用显式 refspec 强推可见 refs，不用 --mirror：后者会捎带 refs/pull/* 等隐藏引用，
+  // 被 GitHub 拒绝后让整条命令返回非 0，把「其实推成功了」误报成失败。
+  const push = await exec('git', ['-C', dir, 'push', '--quiet', '--prune', ghRemote, ...VISIBLE_REFSPECS]).then(
+    () => ({ ok: true, stderr: '' }),
+    (err) => ({ ok: false, stderr: redact(String(err.stderr || err.message)) })
+  );
+
+  let workflowBlocked = false;
+  if (!push.ok) {
+    // 唯一无法绕开的硬限制：源仓库带 .github/workflows/*，而 PAT 未勾 workflow scope 时
+    // GitHub 会拒收这些分支。其余分支/标签本次推送里已经成功，这里只做标记，不算整仓失败。
+    if (/workflow.+scope/i.test(push.stderr)) {
+      workflowBlocked = true;
+      log('  警告：仓库含 .github/workflows/，GITHUB_TOKEN 缺少 workflow 权限，相关分支未能同步');
+      log(`  ${push.stderr.split('\n')[0]}`);
+    } else {
+      throw new Error(push.stderr);
+    }
+  }
 
   // 归档仓库在 GitHub 侧同样置为只读，避免误改
   const { res } = await gh(`/repos/${OWNER}/${name}`, {
@@ -176,7 +225,7 @@ async function mirrorRepo({ name, path, archived = false }, workdir, ghDefaultBr
     body: JSON.stringify({ archived }),
   });
   if (!res.ok) log(`  警告：设置 archived=${archived} 失败：${res.status}`);
-  return { pushed: true };
+  return { pushed: true, workflowBlocked };
 }
 
 const repos = (await listPublicRepos())
@@ -193,9 +242,14 @@ try {
     log(`\n▶ ${repo.path}${repo.archived ? '（归档）' : ''}${repo.forkOf ? `（fork 自 ${repo.forkOf}）` : ''}`);
     try {
       const { defaultBranch } = await ensureGitHubRepo(repo.name, repo.path);
-      await mirrorRepo(repo, workdir, defaultBranch);
-      log('  完成');
-      results.push({ name: repo.name, ok: true });
+      const { workflowBlocked } = await mirrorRepo(repo, workdir, defaultBranch);
+      if (workflowBlocked) {
+        log('  部分完成：分支/标签已同步，含 workflow 的分支跳过');
+        results.push({ name: repo.name, ok: true, workflowBlocked: true });
+      } else {
+        log('  完成');
+        results.push({ name: repo.name, ok: true, workflowBlocked: false });
+      }
     } catch (err) {
       // 单仓失败不中断整体：组织里任何一个仓库出错都不该让其余仓库停摆
       log(`  失败：${err.message}`);
@@ -207,6 +261,11 @@ try {
 }
 
 const failed = results.filter((r) => !r.ok);
+const partial = results.filter((r) => r.ok && r.workflowBlocked);
 log(`\n同步结束：成功 ${results.length - failed.length}/${results.length}`);
+for (const p of partial) log(`  ! ${p.name}：分支/标签已同步，含 workflow 的分支因 token 缺 workflow 权限跳过`);
 for (const f of failed) log(`  ✗ ${f.name}：${f.error}`);
+if (partial.length) {
+  log('\n提示：以上仓库的 .github/workflows/ 未同步，需给 GITHUB_TOKEN 补上 workflow 权限后重跑。');
+}
 process.exit(failed.length ? 1 : 0);
