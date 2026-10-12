@@ -10,9 +10,15 @@
  * 第一步整体报错。需要在「组织设置 → 仓库管控」开启「允许定时任务跨仓操作」，
  * 或改用手动触发按钮执行（手动触发不受该限制）。
  *
+ * 名字映射：默认同名，但 CNB 的本仓库（xindu.site/xindu.site）对应的是 GitHub 个人主页仓库
+ * carolcoral/carolcoral —— 它的 README 就是主页，`sync-org-to-github.mjs` 自己也会被镜像过去。
+ * 因此脚本跑在 CNB 上、产物落在 GitHub，谁也别去镜像谁：映射到自身时直接跳过，见 SELF_MIRROR。
+ *
  * 用法：
  *   node scripts/sync-org-to-github.mjs [--org xindu.site] [--owner carolcoral]
  *                                      [--only a,b] [--skip a,b] [--dry-run]
+ *                                      [--map xindu.site/xindu.site=carolcoral]
+ *                                      [--self-mirror carolcoral]
  *   --dry-run 只枚举与报告，不建仓不推送，也不需要 GITHUB_TOKEN。
  * 环境变量：
  *   CNB_TOKEN        CNB 临时令牌，用于枚举组织仓库（本仓库公开仓库无需鉴权）
@@ -55,6 +61,30 @@ const GIT_EMAIL = process.env.GIT_EMAIL || 'cnb-ci@cnb.cool';
 const CNB_HOST = `${process.env.CNB_WEB_PROTOCOL || 'https'}://${process.env.CNB_WEB_HOST || 'cnb.cool'}`;
 const CNB_API = process.env.CNB_API_ENDPOINT || 'https://api.cnb.cool';
 const GH_API = 'https://api.github.com';
+
+// CNB 仓库名 → GitHub 仓库名。默认同名，只列需要特殊处理的例外。
+// 键是 CNB 裸仓库名（可带组织前缀 `xindu.site/xindu.site` 或全路径），值是 GitHub 侧仓库名。
+// 不写死具体的仓库对：等映射跑起来后，GitHub 那边就是个普通仓库，脚本无需对它特殊照顾。
+const REPO_MAP = parseRepoMap(flag('map', '') || process.env.REPO_MAP || 'xindu.site/xindu.site=carolcoral');
+const SELF_MIRROR = list('self-mirror').map((r) => r.split('/').pop());
+
+function parseRepoMap(spec) {
+  const map = new Map();
+  for (const pair of spec.split(',').map((s) => s.trim()).filter(Boolean)) {
+    const [from, to] = pair.split('=').map((s) => s.trim());
+    if (!from || !to) {
+      console.error(`--map 条目格式应为 <cnb仓库>=<github仓库>，收到：${pair}`);
+      process.exit(1);
+    }
+    map.set(from, to);
+  }
+  return map;
+}
+
+/** 查 CNB 仓库对应的 GitHub 仓库名；命中映射时返回目标名，否则同名 */
+function githubNameFor(repoName, repoPath) {
+  return REPO_MAP.get(repoPath) || REPO_MAP.get(`${ORG}/${repoName}`) || REPO_MAP.get(repoName) || repoName;
+}
 
 // 只镜像对用户可见的 refs。CNB 的 refs/pull/*、refs/fetched/*、refs/notes/* 属隐藏引用，
 // GitHub 一律拒收（deny updating a hidden ref）。早期用 --mirror 会把它们一并推过去，
@@ -105,7 +135,14 @@ async function listPublicRepos() {
   }));
 }
 
-/** GitHub 侧确保同名仓库存在：已存在则直接复用（原地更新），不存在才建仓 */
+/** 解析 CNB 仓库对应的 GitHub 仓库名，命中映射时在日志里点明 */
+function resolveTarget(repo) {
+  const ghName = githubNameFor(repo.name, repo.path);
+  if (ghName !== repo.name) log(`  名字映射：${repo.name} → ${ghName}`);
+  return ghName;
+}
+
+/** GitHub 侧确保目标仓库存在：已存在则直接复用（原地更新），不存在才建仓 */
 async function ensureGitHubRepo(name, cnbPath) {
   const { res, body } = await gh(`/repos/${OWNER}/${name}`);
   if (res.status === 200) return { created: false, defaultBranch: body.default_branch };
@@ -171,17 +208,17 @@ async function detectDefaultBranch(dir) {
  * 而源仓库默认分支是 main），git 会报「deletion of the current branch prohibited」而整体失败。
  * 所以：默认分支不一致时，先把源默认分支推上去、把 GitHub 默认分支切过去，再做全量镜像。
  */
-async function mirrorRepo({ name, path, archived = false }, workdir, ghDefaultBranch) {
+async function mirrorRepo({ name, path, archived = false }, workdir, ghDefaultBranch, ghName = name) {
   const dir = join(workdir, name);
   const cnbRemote = `${CNB_HOST}/${path}.git`;
-  const ghRemote = `https://x-access-token:${GITHUB_TOKEN}@github.com/${OWNER}/${name}.git`;
+  const ghRemote = `https://x-access-token:${GITHUB_TOKEN}@github.com/${OWNER}/${ghName}.git`;
 
   await exec('git', ['clone', '--mirror', '--quiet', cnbRemote, dir]);
   const srcDefault = await detectDefaultBranch(dir);
 
   if (DRY_RUN) {
     const note = ghDefaultBranch && ghDefaultBranch !== srcDefault ? `（默认分支 ${ghDefaultBranch} → ${srcDefault}）` : '';
-    log(`  [dry-run] 将强制推送到 ${OWNER}/${name}${note}`);
+    log(`  [dry-run] 将强制推送到 ${OWNER}/${ghName}${note}`);
     return { pushed: true, workflowBlocked: false };
   }
 
@@ -192,7 +229,7 @@ async function mirrorRepo({ name, path, archived = false }, workdir, ghDefaultBr
   if (ghDefaultBranch && ghDefaultBranch !== srcDefault) {
     log(`  默认分支对齐：${ghDefaultBranch} → ${srcDefault}`);
     await exec('git', ['-C', dir, 'push', '--quiet', ghRemote, `refs/heads/${srcDefault}:refs/heads/${srcDefault}`]);
-    const { res } = await gh(`/repos/${OWNER}/${name}`, {
+    const { res } = await gh(`/repos/${OWNER}/${ghName}`, {
       method: 'PATCH',
       body: JSON.stringify({ default_branch: srcDefault }),
     });
@@ -220,7 +257,7 @@ async function mirrorRepo({ name, path, archived = false }, workdir, ghDefaultBr
   }
 
   // 归档仓库在 GitHub 侧同样置为只读，避免误改
-  const { res } = await gh(`/repos/${OWNER}/${name}`, {
+  const { res } = await gh(`/repos/${OWNER}/${ghName}`, {
     method: 'PATCH',
     body: JSON.stringify({ archived }),
   });
@@ -228,12 +265,23 @@ async function mirrorRepo({ name, path, archived = false }, workdir, ghDefaultBr
   return { pushed: true, workflowBlocked };
 }
 
+const skipped = [];
 const repos = (await listPublicRepos())
   .filter((r) => (ONLY.length ? ONLY.includes(r.name) : true))
   .filter((r) => !SKIP.includes(r.name))
+  // 产物会落到 GitHub 侧被镜像的仓库上，别反过来镜像它。见文件头 SELF_MIRROR 说明。
+  .filter((r) => {
+    const ghName = githubNameFor(r.name, r.path);
+    if (!SELF_MIRROR.includes(ghName)) return true;
+    skipped.push(`  ⊘ ${r.path} → ${OWNER}/${ghName}：会被映射到本同步自身的产物仓库，跳过`);
+    return false;
+  })
   .sort((a, b) => a.name.localeCompare(b.name));
 
 log(`组织 ${ORG} 下共 ${repos.length} 个公开仓库待同步到 github.com/${OWNER}`);
+if (REPO_MAP.size) log(`名字映射：${[...REPO_MAP].map(([a, b]) => `${a}=${b}`).join('，')}`);
+if (SELF_MIRROR.length) log(`自镜像保护：产物落在 ${SELF_MIRROR.map((n) => `${OWNER}/${n}`).join('、')}，对应源仓库跳过`);
+for (const line of skipped) log(line);
 
 const workdir = await mkdtemp(join(tmpdir(), 'cnb-org-sync-'));
 const results = [];
@@ -241,15 +289,16 @@ try {
   for (const repo of repos) {
     log(`\n▶ ${repo.path}${repo.archived ? '（归档）' : ''}${repo.forkOf ? `（fork 自 ${repo.forkOf}）` : ''}`);
     try {
-      const { defaultBranch } = await ensureGitHubRepo(repo.name, repo.path);
-      const { workflowBlocked } = await mirrorRepo(repo, workdir, defaultBranch);
+      const ghName = resolveTarget(repo);
+      const { defaultBranch } = await ensureGitHubRepo(ghName, repo.path);
+      const { workflowBlocked } = await mirrorRepo(repo, workdir, defaultBranch, ghName);
+      const pushed = { name: repo.name, ghName, ok: true, workflowBlocked };
       if (workflowBlocked) {
         log('  部分完成：分支/标签已同步，含 workflow 的分支跳过');
-        results.push({ name: repo.name, ok: true, workflowBlocked: true });
       } else {
         log('  完成');
-        results.push({ name: repo.name, ok: true, workflowBlocked: false });
       }
+      results.push(pushed);
     } catch (err) {
       // 单仓失败不中断整体：组织里任何一个仓库出错都不该让其余仓库停摆
       log(`  失败：${err.message}`);
@@ -261,9 +310,11 @@ try {
 }
 
 const failed = results.filter((r) => !r.ok);
+const renamed = results.filter((r) => r.ok && r.ghName !== r.name);
 const partial = results.filter((r) => r.ok && r.workflowBlocked);
 log(`\n同步结束：成功 ${results.length - failed.length}/${results.length}`);
 for (const p of partial) log(`  ! ${p.name}：分支/标签已同步，含 workflow 的分支因 token 缺 workflow 权限跳过`);
+for (const r of renamed) log(`  → ${r.name} 已同步到 ${OWNER}/${r.ghName}`);
 for (const f of failed) log(`  ✗ ${f.name}：${f.error}`);
 if (partial.length) {
   log('\n提示：以上仓库的 .github/workflows/ 未同步，需给 GITHUB_TOKEN 补上 workflow 权限后重跑。');
