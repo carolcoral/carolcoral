@@ -40,8 +40,9 @@
 | GitHub | [github.com/carolcoral](https://github.com/carolcoral) | 全球开源主阵地 · 社区互动 |
 | CNB | [cnb.cool/xindu.site](https://cnb.cool/xindu.site) | 国内高速镜像 · Redmine 生态专属托管 |
 
-> 🔁 **协同策略**：核心项目（`api-server`、`redmine_reminder`、`redmine_webhook`、`redmine_logo`）
-> 在 CNB 建立国内镜像，CI 流水线自动同步至 GitHub，实现**国内外双轨同步**。
+> 🔁 **协同策略**：本组织下的公开仓库每天凌晨 **04:00** 由 CNB 流水线自动镜像到 GitHub 同名仓库
+> （`scripts/sync-org-to-github.mjs`，分支与标签全量同步），实现**国内外双轨同步**；
+> 需要在 GitHub 侧调整时，改 CNB 源仓库即可，下次同步会以 CNB 为准覆盖。
 
 ---
 

@@ -1,12 +1,12 @@
 # ╔══════════════════════════════════════════════╗
-# ║  Web Trigger — 手动触发同步按钮               ║
+# ║  Web Trigger — 手动同步按钮                   ║
 # ║  在 CNB 分支详情页显示「同步到 GitHub」按钮   ║
 # ╚══════════════════════════════════════════════╝
 
 branch:
   - buttons:
-      - name: 同步到 GitHub
-        description: 将 CNB 仓库代码强制同步到 GitHub (carolcoral/carolcoral)
+      - name: 同步组织仓库到 GitHub
+        description: 将组织下所有公开仓库镜像到 GitHub（与每日定时任务同一逻辑，可手动补跑）
         event: web_trigger_push_github
         permissions:
           roles: [owner]

@@ -1,7 +1,7 @@
 # ╔══════════════════════════════════════════════╗
 # ║  CNB Pipeline                                 ║
 # ║  1) 定时生成 GitHub 统计 SVG → 落仓库          ║
-# ║  2) 手动触发：同步代码到 GitHub                ║
+# ║  2) 定时/手动：镜像组织公开仓库到 GitHub        ║
 # ╚══════════════════════════════════════════════╝
 
 main:
@@ -44,28 +44,50 @@ main:
             git push origin "HEAD:${CNB_BRANCH:-main}"
             echo "已提交并推送 $STATS_OUT"
 
-# 手动触发：将代码推送到 GitHub
-$:
-  web_trigger_push_github:
-    - name: push-to-github
+  # 每天 04:00 (UTC+8) 把组织下所有公开仓库镜像到 GitHub 同名仓库
+  # 这里是编排入口：真正的同步逻辑在 scripts/sync-org-to-github.mjs（建仓 + 逐个镜像 + 单仓失败不影响其余）。
+  # 注意：定时任务的 CNB_TOKEN 默认只能访问当前仓库，跨仓枚举需要组织管理员在
+  # 「组织设置 → 仓库管控」中开启「允许定时任务跨仓操作」；未开启时同步会失败，
+  # 可改用手动触发按钮（事件 web_trigger_push_github）执行。
+  "crontab: 0 4 * * *":
+    - name: sync-org-to-github
       docker:
-        image: docker.io/alpine/git:latest
+        image: node:20
       imports:
         # 密钥仓库需包含 GITHUB_TOKEN（Personal Access Token，需 repo 权限）
-        # 请根据实际密钥仓库路径修改此 URL
         - https://cnb.cool/xindu.site/secret/-/blob/main/token.yaml
+      env:
+        ORG_SLUG: xindu.site
+        GITHUB_OWNER: carolcoral
+      lock:
+        # 与手动触发共用一把锁，避免两次同步并发推送同一个 GitHub 仓库
+        key: sync-org-to-github
+        wait: true
+        cancel-in-wait: true
       stages:
-        - name: push to GitHub
+        - name: sync
           script: |
-            git config --global user.email "cnb-ci@cnb.cool"
-            git config --global user.name "CNB CI"
+            set -e
+            node scripts/sync-org-to-github.mjs --org "$ORG_SLUG" --owner "$GITHUB_OWNER"
 
-            # 移除 CNB 专属文件，不推送到 GitHub
-            rm -rf .cnb/ .cnb.yml .codebuddy .github .ide
-            git add -A
-            git commit -m "chore: remove CNB config (auto-generated mirror)" --allow-empty
-
-            # 推送到 GitHub
-            git remote add github https://x-access-token:${GITHUB_TOKEN}@github.com/carolcoral/carolcoral.git
-            git push github HEAD:refs/heads/${CNB_BRANCH} --force
-            git push github --tags --force
+# 手动触发
+$:
+  # 手动触发：镜像组织下所有公开仓库到 GitHub（与定时任务同一逻辑，用于补跑/首次全量同步）
+  web_trigger_push_github:
+    - name: sync-org-to-github
+      docker:
+        image: node:20
+      imports:
+        - https://cnb.cool/xindu.site/secret/-/blob/main/token.yaml
+      env:
+        ORG_SLUG: xindu.site
+        GITHUB_OWNER: carolcoral
+      lock:
+        key: sync-org-to-github
+        wait: true
+        cancel-in-wait: true
+      stages:
+        - name: sync
+          script: |
+            set -e
+            node scripts/sync-org-to-github.mjs --org "$ORG_SLUG" --owner "$GITHUB_OWNER"
