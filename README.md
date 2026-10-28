@@ -16,33 +16,13 @@
 
 *“Build · Mirror · Share”*
 
-[![GitHub](https://img.shields.io/badge/GitHub-carolcoral-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/carolcoral)
-[![CNB](https://img.shields.io/badge/CNB-xindu.site-0052cc?style=for-the-badge&logo=gitlab&logoColor=white)](https://cnb.cool/xindu.site)
-[![Website](https://img.shields.io/badge/Website-xindu.site-22d3ee?style=for-the-badge&logo=homeadvisor&logoColor=white)](https://xindu.site)
-[![Blog](https://img.shields.io/badge/Blog-blog.xindu.site-3b82f6?style=for-the-badge&logo=hashnode&logoColor=white)](https://blog.xindu.site)
-
 </div>
-
-## 📊 Live Stats
 
 <div align="center">
 
 <img src="https://cnb.cool/xindu.site/xindu.site/-/git/raw/main/assets/github-stats.svg" alt="GitHub stats" width="860"/>
 
 </div>
-
----
-
-## 🌐 双平台部署 / Dual-Platform
-
-| 平台 | 地址 | 定位 |
-|---|---|---|
-| GitHub | [github.com/carolcoral](https://github.com/carolcoral) | 全球开源主阵地 · 社区互动 |
-| CNB | [cnb.cool/xindu.site](https://cnb.cool/xindu.site) | 国内高速镜像 · Redmine 生态专属托管 |
-
-> 🔁 **协同策略**：本组织下的公开仓库每天凌晨 **04:00** 由 CNB 流水线自动镜像到 GitHub 同名仓库
-> （`scripts/sync-org-to-github.mjs`，分支与标签全量同步），实现**国内外双轨同步**；
-> 需要在 GitHub 侧调整时，改 CNB 源仓库即可，下次同步会以 CNB 为准覆盖。
 
 ---
 
@@ -63,9 +43,7 @@
 Name     : Carol (carolcoral)
 Role     : 全栈开发者 / 开源爱好者
 Focus    : Redmine 插件生态 · NAS/媒体自动化 · Web 全栈
-Web      : https://xindu.site · https://blog.xindu.site
 GitHub   : 自 2014 起 · 30+ public repos
-CNB      : https://cnb.cool/xindu.site
 Motto    : "Build · Mirror · Share"
 ```
 
@@ -75,6 +53,5 @@ Motto    : "Build · Mirror · Share"
 
 [![Stars](https://img.shields.io/github/stars/carolcoral?label=Stars&style=social)](https://github.com/carolcoral)
 [![Followers](https://img.shields.io/github/followers/carolcoral?label=Followers&style=social)](https://github.com/carolcoral?tab=followers)
-[![Website](https://img.shields.io/badge/Website-xindu.site-22d3ee?style=social&logo=homeadvisor)](https://xindu.site)
 
 </div>
